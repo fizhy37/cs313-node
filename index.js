@@ -2,14 +2,15 @@ const express = require('express')
 const path = require('path')
 const PORT = process.env.PORT || 5000
 
-var app = express();
-
 const { Client } = require('pg');
 
 const client = new Client({
   connectionString: process.env.DATABASE_URL,
   ssl: true,
 });
+
+//client.connect();
+
 
 client.connect((error, client, done) => {
 	//Check if we are on Heroku or laptop. Because if we are heroku, use crazy long url, otherwise localhost on laptop
@@ -28,33 +29,6 @@ client.connect((error, client, done) => {
 			console.log("Table Exists");
 		}
 	});
-});
-
-
-app.get('/todoList', function(request, response) {
-  	
-  	console.log('todoList');
-
-	client.connect((error, client, done) => {
-		if (error) {
-			throw error;
-		}
-		client.query("SELECT * FROM item;", function callbackBaby(err, res) {
-			done();
-			if (err) {
-				console.log(err.stack);
-			}
-			else {
-				console.log("Select Statement Successful");
-				console.log(res.rows[0]); //gg
-  				response.setHeader('Content-Type', 'application/json');
-  				response.send(JSON.stringify({ result: res.rows }));
-			}
-		});
-
-	});
-	//response.render('pages/results', { result: result });
-
 });
 
 
