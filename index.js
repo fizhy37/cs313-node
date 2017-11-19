@@ -9,9 +9,9 @@ const client = new Client({
   ssl: true,
 });
 
-//client.connect();
+client.connect();
 
-/*
+
 client.query('SELECT * FROM item;', (err, res) => {
   if (err) throw err;
   for (let row of res.rows) {
@@ -19,26 +19,7 @@ client.query('SELECT * FROM item;', (err, res) => {
   }
   client.end();
 });
-*/
 
-client.connect((error, client, done) => {
-	//Check if we are on Heroku or laptop. Because if we are heroku, use crazy long url, otherwise localhost on laptop
-		if (error) {
-			throw error;
-		}
-		client.query("SELECT 1 from information_schema.tables WHERE table_name = 'item';", function callback(err, res) { 
-			if (res.rowCount == 0) {
-				client.query("CREATE TABLE IF NOT EXISTS item (id SERIAL, task VARCHAR(255), is_done BOOLEAN);", function callback(err, res) {
-					client.query("INSERT INTO item (id, task, is_done) VALUES (DEFAULT, 'homework', false);", function callback(err, res) {
-						done();
-						console.log("Table initialized");
-					});
-				})
-			} else {
-				console.log("Table Exists");
-			}
-		});
-	});
 
 express()
   .use(express.static(path.join(__dirname, 'public')))
