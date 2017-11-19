@@ -11,7 +11,7 @@ const client = new Client({
   ssl: true,
 });
 
-app.set('port', (process.env.PORT || 5432));
+app.set('port', (process.env.PORT || 5000));
 
 app.use(express.static(__dirname + '/public'));
 
