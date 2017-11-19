@@ -135,9 +135,10 @@ app.get('/calculateRate', function(request, response) {
   response.setHeader('Content-Type', 'application/json');
   response.send(JSON.stringify({ result: result }));
 });
-*/
+
 
 app.listen(app.get('port'), function() {
   console.log('Node app is running on port', app.get('port'));
 })
 ;
+*/
