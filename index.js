@@ -40,7 +40,7 @@ client.connect((error, client, done) => {
 app.get('/todoList', function(request, response) {
   	
   	console.log('todoList');
-
+/*
 	client.connect((error, client, done) => {
 		if (error) {
 			throw error;
@@ -57,13 +57,13 @@ app.get('/todoList', function(request, response) {
   				response.send(JSON.stringify({ result: res.rows }));
 			}
 		});
-		
+*/
 });
 
 
   
   //response.render('pages/results', { result: result });
-});
+
 
 express()
   .use(express.static(path.join(__dirname, 'public')))
