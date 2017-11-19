@@ -57,13 +57,11 @@ app.get('/todoList', function(request, response) {
   				response.send(JSON.stringify({ result: res.rows }));
 			}
 		});
+
+	});
+	//response.render('pages/results', { result: result });
 */
 });
-
-
-  
-  //response.render('pages/results', { result: result });
-
 
 express()
   .use(express.static(path.join(__dirname, 'public')))
