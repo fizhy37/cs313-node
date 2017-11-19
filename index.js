@@ -2,20 +2,40 @@ require('dot-env');
 var express = require('express');
 var app = express();
 
+/*
 const {Pool} = require('pg');
 const connectionString = process.env.DATABASE_URL;
 const pool = new Pool({
 	connectionString : connectionString,
 });
+*/
 
+const { Client } = require('pg');
+
+const client = new Client({
+  connectionString: process.env.DATABASE_URL,
+  ssl: true,
+});
+
+client.connect();
+
+client.query('SELECT table_schema,table_name FROM information_schema.tables;', (err, res) => {
+  if (err) throw err;
+  for (let row of res.rows) {
+    console.log(JSON.stringify(row));
+  }
+  client.end();
+});
+
+/*
 pool.connect((error, client, done) => {
 	//Check if we are on Heroku or laptop. Because if we are heroku, use crazy long url, otherwise localhost on laptop
 		if (error) {
 			throw error;
 		}
-		client.query("SELECT 1 from information_schema.tables WHERE table_name = 'item';", function callbackBaby(err, res) { 
+		client.query("SELECT 1 from information_schema.tables WHERE table_name = 'item';", function callback(err, res) { 
 			if (res.rowCount == 0) {
-				client.query("CREATE TABLE IF NOT EXISTS item (id SERIAL, task VARCHAR(255), is_done BOOLEAN);", function callbackBaby(err, res) {
+				client.query("CREATE TABLE IF NOT EXISTS item (id SERIAL, task VARCHAR(255), is_done BOOLEAN);", function callback(err, res) {
 					client.query("INSERT INTO item (id, task, is_done) VALUES (DEFAULT, 'homework', false);", function callback(err, res) {
 						done();
 						console.log("Table initialized");
@@ -102,7 +122,9 @@ app.get('/calculateRate', function(request, response) {
   response.setHeader('Content-Type', 'application/json');
   response.send(JSON.stringify({ result: result }));
 });
+*/
 
 app.listen(app.get('port'), function() {
   console.log('Node app is running on port', app.get('port'));
-});
+})
+;
