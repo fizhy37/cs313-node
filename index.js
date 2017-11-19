@@ -1,4 +1,5 @@
-const express = require('express')
+var express = require('express')
+var app = express();
 const path = require('path')
 const PORT = process.env.PORT || 5000
 
@@ -13,7 +14,6 @@ const client = new Client({
 
 
 client.connect((error, client, done) => {
-	//Check if we are on Heroku or laptop. Because if we are heroku, use crazy long url, otherwise localhost on laptop
 	if (error) {
 		throw error;
 	}
@@ -31,6 +31,10 @@ client.connect((error, client, done) => {
 	});
 });
 
+app.get('/todoList', (req, res) => {
+	console.log('To Do List');
+	res.render('pages/todo');
+});
 
 express()
   .use(express.static(path.join(__dirname, 'public')))
