@@ -3,7 +3,7 @@ var express = require('express');
 var app = express();
 
 const {Pool} = require('pg');
-const connectionString = process.env.POSTGRES_URL;
+const connectionString = process.env.DATABASE_URL;
 const pool = new Pool({
 	connectionString : connectionString,
 });
