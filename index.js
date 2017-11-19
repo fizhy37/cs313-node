@@ -11,13 +11,6 @@ const client = new Client({
   ssl: true,
 });
 
-// views is directory for all template files
-app.set('views', __dirname + '/views');
-app.set('view engine', 'ejs');
-
-//client.connect();
-
-
 client.connect((error, client, done) => {
 	//Check if we are on Heroku or laptop. Because if we are heroku, use crazy long url, otherwise localhost on laptop
 	if (error) {
@@ -37,10 +30,11 @@ client.connect((error, client, done) => {
 	});
 });
 
+
 app.get('/todoList', function(request, response) {
   	
   	console.log('todoList');
-/*
+
 	client.connect((error, client, done) => {
 		if (error) {
 			throw error;
@@ -60,8 +54,9 @@ app.get('/todoList', function(request, response) {
 
 	});
 	//response.render('pages/results', { result: result });
-*/
+
 });
+
 
 express()
   .use(express.static(path.join(__dirname, 'public')))
