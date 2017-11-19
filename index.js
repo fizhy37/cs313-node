@@ -2,6 +2,8 @@ const express = require('express')
 const path = require('path')
 const PORT = process.env.PORT || 5000
 
+var app = express();
+
 const { Client } = require('pg');
 
 const client = new Client({
@@ -35,7 +37,7 @@ app.get('/todoList', function(request, response) {
   	
   	console.log('todoList');
 
-	pool.connect((error, client, done) => {
+	client.connect((error, client, done) => {
 		if (error) {
 			throw error;
 		}
