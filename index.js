@@ -29,10 +29,19 @@ client.connect((error, client, done) => {
 });
 
 app.get('/todoList', (req, res) => {
-	client.query("SELECT * FROM item;", function callback(err, res) {
+	client.connect((error, client, done) => {
+	if (error) {
+		throw error;
+	}
+	client.query("SELECT * FROM item;", function callback(err, res) { 
+		console.log("Good Job");
 		done();
-		console.log("Called todo List");
+		});
 	});
+	//client.query("SELECT * FROM item;", function callback(err, res) {
+	//	done();
+	//	console.log("Called todo List");
+	//});
 });
 
 app.post('/createTask', (req, res) => {
