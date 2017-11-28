@@ -29,15 +29,15 @@ client.connect((error, client, done) => {
 });
 
 app.get('/todoList', (req, res) => {
-	client.connect((error, client, done) => {
-	if (error) {
-		throw error;
-	}
-	client.query("SELECT * FROM item;", function callback(err, res) { 
-		console.log("Good Job");
-		done();
-		});
-	});
+	// client.connect((error, client, done) => {
+	// if (error) {
+	// 	throw error;
+	// }
+	// client.query("SELECT * FROM item;", function callback(err, res) { 
+	// 	console.log("Good Job");
+	// 	done();
+	// 	});
+	// });
 	//client.query("SELECT * FROM item;", function callback(err, res) {
 	//	done();
 	//	console.log("Called todo List");
