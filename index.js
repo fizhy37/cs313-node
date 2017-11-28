@@ -42,6 +42,7 @@ app.get('/todoList', (req, res) => {
 	//	done();
 	//	console.log("Called todo List");
 	//});
+	res.json({message: "testing"})
 });
 
 app.post('/createTask', (req, res) => {
