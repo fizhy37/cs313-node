@@ -70,7 +70,6 @@ app.post('/createTask', (request, response) => {
 	console.log("Create Task");
 	var task = request.body.task;
 	console.log(task);
-	/*
 	pool.connect((error, client, done) => {
 		if (error) {
 			throw error;
@@ -89,7 +88,6 @@ app.post('/createTask', (request, response) => {
 			}
 		});
 	});
-	*/
 });
 
 app.put('/updateTask', (req, res) => {
