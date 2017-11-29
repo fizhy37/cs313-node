@@ -1,12 +1,112 @@
 <!DOCTYPE html>
 <html>
 <head>
+  <% include ../partials/header.ejs %>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 </head>
 
-<body>
+<body onload="initializeApp()">
+  <% include ../partials/nav.ejs %>
+  <script> 
+    function initializeApp() {
+      $.get('/todoList',
+        function callback(data, status) {
+          //when the thing comes back, update the DOM. 
+          if (status != 'success') {
+            console.log(status);
+          } else {
+            // var result = data.result;
+            console.log("todo list data came back");
+            var result = data.result;
+            //update DOM.
+            $('#list').html("");
+            $.each(result, function(i, item) {
+              //alert(result[i].task);
+              $('#list').append('<p>' +result[i].task+ '</p>');
+            })
+            //$('#list').html(result[0].task);
+          }
+        });
+    }
 
-<h1>Welcome to the To Do List</h1>
+    function createTask() {
+      $.post('/createTask',
+        {
+          'task': $('input[name=task]').val(),
+          //'package': $('input[name=package]:checked').val()
+        },
+        function callback(data, status) {
+          //when the thing comes back, update the DOM. 
+          if (status != 'success') {
+            console.log(status);
+          } else {
+            // var result = data.result;
+            console.log("create task data came back");
+            var result = data.result;
+            //update DOM.
+            $('#list').html("");
+            $.each(result, function(i, item) {
+              //alert(result[i].task);
+              $('#list').append('<p>' +result[i].task+ '</p>');
+            })
+          }
+        });
+    }
 
+    function updateTask() {
+      $.ajax({
+        url: '/updateTask',
+        type: 'PUT',
+        success: function callback(data, status) {
+          //when the thing comes back, update the DOM. 
+          if (status != 'success') {
+            console.log(status);
+          } else {
+            // var result = data.result;
+            console.log("data came back");
+            var result = data.result;
+            //update DOM.
+            $('#result').html(result.task);
+          }
+      }});
+    }
 
+    function deleteTask() {
+      $.ajax('/deleteTask',
+        function callback(data, status) {
+          //when the thing comes back, update the DOM. 
+          if (status != 'success') {
+            console.log(status);
+          } else {
+            // var result = data.result;
+            console.log("data came back");
+            var result = data.result;
+            //update DOM.
+            $('#result').html(result);
+          }
+        });
+    }
+  </script>
+  <div id="list"></div>
+  <div class="container">
+    <h1>To Do List</h1>
+    <form action="/createTask" method="POST">
+      <label for="task">Task</label>
+      <input type="text" name="task">
+
+      <label for="done">Is Done</label>
+      <input type="checkbox" name="done" value="is_done"><br/>
+
+      <input type="submit" name="submit">
+    </form>
+    <button onclick="dothejax()">AJAX Version </button>
+    <button onclick="initializeApp()">Get To Do List</button>
+    <button onclick="createTask()">Create Task</button>
+    <button onclick="updateTask()">Update Task</button>
+    <button onclick="deleteTask()">Delete Task</button>
+    
+    <p id="package"></p>
+    <p id="task"></p>
+ </div>
 </body>
 </html>
