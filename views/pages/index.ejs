@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <% include ../partials/header.ejs %>
+  <!--<% include ../partials/header.ejs %>-->
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 </head>
 
 <body onload="initializeApp()">
-  <% include ../partials/nav.ejs %>
+  <!--<% include ../partials/nav.ejs %>-->
   <script> 
     function initializeApp() {
       $.get('/todoList',
@@ -33,7 +33,7 @@
       $.post('/createTask',
         {
           'task': $('input[name=task]').val(),
-          //'package': $('input[name=package]:checked').val()
+          //'done': $('input[name=done]:checked').val()
         },
         function callback(data, status) {
           //when the thing comes back, update the DOM. 
@@ -44,11 +44,8 @@
             console.log("create task data came back");
             var result = data.result;
             //update DOM.
-            $('#list').html("");
-            $.each(result, function(i, item) {
-              //alert(result[i].task);
-              $('#list').append('<p>' +result[i].task+ '</p>');
-            })
+            
+            initializeApp();
           }
         });
     }
@@ -72,8 +69,10 @@
     }
 
     function deleteTask() {
-      $.ajax('/deleteTask',
-        function callback(data, status) {
+      $.ajax({
+        url: '/deleteTask',
+        type: 'DELETE',
+        success: function callback(data, status) {
           //when the thing comes back, update the DOM. 
           if (status != 'success') {
             console.log(status);
@@ -84,7 +83,7 @@
             //update DOM.
             $('#result').html(result);
           }
-        });
+        }});
     }
   </script>
   <div id="list"></div>
@@ -99,7 +98,6 @@
 
       <input type="submit" name="submit">
     </form>
-    <button onclick="dothejax()">AJAX Version </button>
     <button onclick="initializeApp()">Get To Do List</button>
     <button onclick="createTask()">Create Task</button>
     <button onclick="updateTask()">Update Task</button>
