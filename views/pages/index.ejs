@@ -19,6 +19,7 @@
             console.log("todo list data came back");
             var result = data.result;
             //update DOM.
+            $('#task_name').value("");
             $('#list').html("");
             $.each(result, function(i, item) {
               //alert(result[i].task);
@@ -91,7 +92,7 @@
     <h1>To Do List</h1>
     <form action="/createTask" method="POST">
       <label for="task">Task</label>
-      <input type="text" name="task">
+      <input id="task_name" type="text" name="task">
 
       <label for="done">Is Done</label>
       <input type="checkbox" name="done" value="is_done"><br/>
