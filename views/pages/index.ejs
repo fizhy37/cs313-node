@@ -19,72 +19,100 @@
             console.log("todo list data came back");
             var result = data.result;
             //update DOM.
-            
             $('#list').html("");
             $.each(result, function(i, item) {
-              //alert(result[i].task);
-              $('#list').append('<p>' +result[i].task+ '</p>');
+              $('#list').append('<input type="radio" name="taskList" value="' +result[i].id+ '">' +result[i].task+ '</input><br/>');
+              console.log(result[i].id);
+              console.log(result[i].task);
             })
             //$('#list').html(result[0].task);
           }
         });
     }
 
+    function handleLogin() {
+      var username = $("#username").val();
+	    var password = $("#password").val();
+      
+      var params = {
+		    username: username,
+		    password: password
+	    };
+    }
+
     function createTask() {
       $.post('/createTask',
         {
           'task': $('input[name=task]').val(),
-          //'done': $('input[name=done]:checked').val()
+          //'taskList': $('input[name=taskList]:checked').val()
         },
         function callback(data, status) {
           //when the thing comes back, update the DOM. 
           if (status != 'success') {
             console.log(status);
           } else {
-            // var result = data.result;
             console.log("create task data came back");
             var result = data.result;
             //update DOM.
-            
             initializeApp();
           }
         });
     }
 
     function updateTask() {
+      var taskList = $('input[name=taskList]:checked').val();
+      var taskName = $('input[name=task]').val();
+
+      var data = {
+        'taskList': $('input[name=taskList]:checked').val()
+      };
+
+      console.log(data.taskList);
+      console.log(taskName);
+
       $.ajax({
         url: '/updateTask',
         type: 'PUT',
-        success: function callback(data, status) {
-          //when the thing comes back, update the DOM. 
+        data: {
+          'taskName': taskName,
+          'taskList': taskList
+        },
+        json: true,
+        success: function callback(data, status) { 
           if (status != 'success') {
             console.log(status);
           } else {
-            // var result = data.result;
             console.log("data came back");
             var result = data.result;
             //update DOM.
-            $('#result').html(result.task);
+            initializeApp();
+            $('#taskName').val("");
           }
       }});
     }
 
     function deleteTask() {
+      var taskList = $('input[name=taskList]:checked').val();
+
+      console.log(taskList);
+
       $.ajax({
         url: '/deleteTask',
         type: 'DELETE',
-        success: function callback(data, status) {
-          //when the thing comes back, update the DOM. 
+        data: {
+          'taskList': taskList
+        },
+        json: true,
+        success: function callback(data, status) { 
           if (status != 'success') {
             console.log(status);
           } else {
-            // var result = data.result;
             console.log("data came back");
             var result = data.result;
             //update DOM.
-            $('#result').html(result);
+            initializeApp();
           }
-        }});
+      }});
     }
   </script>
   <div id="list"></div>
@@ -92,7 +120,7 @@
     <h1>To Do List</h1>
     <form action="/createTask" method="POST">
       <label for="task">Task</label>
-      <input id="task_name" type="text" name="task">
+      <input id="taskName" type="text" name="task">
 
       <label for="done">Is Done</label>
       <input type="checkbox" name="done" value="is_done"><br/>
