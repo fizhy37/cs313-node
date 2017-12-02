@@ -25,3 +25,21 @@
     .jumbotron .lang-logo img {
       max-width: 100%; }
 
+.not_done {
+  background-color: red;
+  font-weight: bold;
+  border: none;
+  margin: 10px; }
+
+  .not_done:focus {
+    background-color: white; }
+
+.is_done {
+  color: white;
+  background-color: green;
+  outline: none;
+  border:none;
+  margin: 10px; }
+
+  .is_done:focus {
+    background-color: #449944; }

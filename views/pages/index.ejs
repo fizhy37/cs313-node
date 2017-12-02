@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <!--<% include ../partials/header.ejs %>-->
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <% include ../partials/header.ejs %>
+  <!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>-->
 </head>
 
 <body onload="initializeApp()">
@@ -16,16 +16,39 @@
             console.log(status);
           } else {
             // var result = data.result;
-            console.log("todo list data came back");
+            //console.log("todo list data came back");
             var result = data.result;
             //update DOM.
+
             $('#list').html("");
             $.each(result, function(i, item) {
-              $('#list').append('<input type="radio" name="taskList" value="' +result[i].id+ '">' +result[i].task+ '</input><br/>');
-              console.log(result[i].id);
-              console.log(result[i].task);
+              var checkIt = 'unchecked';
+              var is_done = 'not_done';
+
+              if (result[i].is_done) {
+                is_done = 'is_done';
+                checkIt = 'checked';
+              }
+
+              var taskID = result[i].id;
+              var taskName = result[i].task;
+
+              var input_id = result[i].id + result[i].task;
+              var input_id = input_id.replace(/(?!\w|\s)./g, '');
+
+              //console.log(input_id);
+              //$('#list').append('<input class="' +is_done+ '" type="radio" name="taskList" value="' +result[i].id+ '">' +result[i].task+ '</input><br/>');
+              $('#list').append('<div class="' +is_done+ '">' +
+                                '<input type="checkbox" onchange="setDone(this, ' +taskID+ ');" ' +checkIt+ '>' +
+                                '<input type="text" id="' +input_id+ '" class="' +is_done+ '" value="' +taskName+ '" ' +
+                                  'onchange="updateTask(' +taskID+ ', \'#' +input_id+ '\')">' +
+                                //'<button onclick="setDone(' +taskID+ ')">Done</button>' +
+                                '<button onclick="deleteTask(' +taskID+ ')">Delete</button>');
+              //console.log(result[i].id);
+              //console.log(result[i].task);
+              $('#forNotDone').attr('class', is_done);
+              //console.log(is_done);
             })
-            //$('#list').html(result[0].task);
           }
         });
     }
@@ -51,7 +74,7 @@
           if (status != 'success') {
             console.log(status);
           } else {
-            console.log("create task data came back");
+            //console.log("create task data came back");
             var result = data.result;
             //update DOM.
             initializeApp();
@@ -60,30 +83,53 @@
         });
     }
 
-    function updateTask() {
-      var taskList = $('input[name=taskList]:checked').val();
-      var taskName = $('input[name=task]').val();
+    function setDone(checkbox, id) {
+      var is_done = false;
+      if (checkbox.checked == true) {
+        is_done = true;
+      }
 
-      var data = {
-        'taskList': $('input[name=taskList]:checked').val()
-      };
-
-      console.log(data.taskList);
-      console.log(taskName);
+      //console.log(is_done);
 
       $.ajax({
-        url: '/updateTask',
+        url: '/setDone',
         type: 'PUT',
         data: {
-          'taskName': taskName,
-          'taskList': taskList
+          'id': id,
+          'is_done': is_done
         },
         json: true,
         success: function callback(data, status) { 
           if (status != 'success') {
             console.log(status);
           } else {
-            console.log("data came back");
+            initializeApp();
+          }
+        }});
+    }
+
+    function updateTask(id, input_id) {
+      //var taskList = $('input[name=taskList]:checked').val();
+      var taskName = $(input_id).val();
+
+      //console.log(data.taskList);
+      //console.log(taskName);
+      //console.log(id);
+
+      $.ajax({
+        url: '/updateTask',
+        type: 'PUT',
+        data: {
+          'taskName': taskName,
+          //'taskList': taskList,
+          'id': id
+        },
+        json: true,
+        success: function callback(data, status) { 
+          if (status != 'success') {
+            console.log(status);
+          } else {
+            //console.log("data came back");
             var result = data.result;
             //update DOM.
             initializeApp();
@@ -92,23 +138,24 @@
       }});
     }
 
-    function deleteTask() {
+    function deleteTask(id) {
       var taskList = $('input[name=taskList]:checked').val();
 
-      console.log(taskList);
+      //console.log(taskList);
 
       $.ajax({
         url: '/deleteTask',
         type: 'DELETE',
         data: {
-          'taskList': taskList
+          'id': id,
+          //'taskList': taskList
         },
         json: true,
         success: function callback(data, status) { 
           if (status != 'success') {
             console.log(status);
           } else {
-            console.log("data came back");
+            //console.log("data came back");
             var result = data.result;
             //update DOM.
             initializeApp();
@@ -116,23 +163,20 @@
       }});
     }
   </script>
-  <div id="list"></div>
+
   <div class="container">
     <h1>To Do List</h1>
-    <form action="" method="POST">
-      <label for="task">Task</label>
       <input id="taskName" type="text" name="task">
-
-      <label for="done">Is Done</label>
-      <input type="checkbox" name="done" value="is_done"><br/>
-    </form>
-    <button onclick="initializeApp()">Get To Do List</button>
     <button onclick="createTask()">Create Task</button>
+    <!--
+    <button onclick="initializeApp()">Get To Do List</button>
     <button onclick="updateTask()">Update Task</button>
     <button onclick="deleteTask()">Delete Task</button>
-    
-    <p id="package"></p>
-    <p id="task"></p>
+    -->
+
+    <hr>
+
+    <div id="list"></div>
  </div>
 </body>
 </html>

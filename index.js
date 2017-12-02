@@ -49,14 +49,12 @@ app.get('/todoList', function(request, response) {
 		if (error) {
 			throw error;
 		}
-		client.query("SELECT * FROM item;", function callback(err, res) {
+		client.query("SELECT * FROM item ORDER BY id ASC;", function callback(err, res) {
 			done();
 			if (err) {
 				console.log(err.stack);
 			}
 			else {
-				//console.log("Select Statement Successful");
-				//console.log(res.rows[0]);
   				response.setHeader('Content-Type', 'application/json');
   				response.send(JSON.stringify({ result: res.rows, success: true, status: 200 }));
   				console.log("sent results");
@@ -80,8 +78,6 @@ app.post('/createTask', (request, response) => {
 				console.log(err.stack);
 			}
 			else {
-				//console.log("Select Statement Successful");
-				//console.log(res.rows[0]);
   				response.setHeader('Content-Type', 'application/json');
   				response.send(JSON.stringify({ result: res.rows, success: true, status: 200 }));
   				console.log("created task");
@@ -90,17 +86,44 @@ app.post('/createTask', (request, response) => {
 	});
 });
 
-app.put('/updateTask', (request, response) => {
-	console.log("Updating Task");
-	var taskID = request.body.taskList;
-	var taskName = request.body.taskName;
-	console.log(taskID);
-	console.log(taskName);
+app.put('/setDone', (request, response) => {
+	console.log("Setting Done");
+	//var taskID = request.body.taskList;
+	//var taskName = request.body.taskName;
+	var given_id = request.body.id;
+	var is_done = request.body.is_done;
+	//console.log(taskID);
+	//console.log(taskName);
+	console.log(given_id);
 	pool.connect((error, client, done) => {
 		if (error) {
 			throw error;
 		}
-		client.query("UPDATE item SET task = '" +taskName+ "' WHERE id = " + taskID + ";", function callback(err, res) {
+		client.query("UPDATE item SET is_done = " +is_done+ " WHERE id = " +given_id+ ";", function callback(err, res) {
+			done();
+			if (err) {
+				console.log(err.stack);
+			} else {
+  				console.log("Set Done");
+  				response.json({ success: true, status: 200 });
+			}
+		});
+	});
+});
+
+app.put('/updateTask', (request, response) => {
+	console.log("Updating Task");
+	//var taskID = request.body.taskList;
+	var taskName = request.body.taskName;
+	var given_id = request.body.id;
+	//console.log(taskID);
+	console.log(taskName);
+	console.log(given_id);
+	pool.connect((error, client, done) => {
+		if (error) {
+			throw error;
+		}
+		client.query("UPDATE item SET task = '" +taskName+ "' WHERE id = " + given_id + ";", function callback(err, res) {
 			done();
 			if (err) {
 				console.log(err.stack);
@@ -114,7 +137,7 @@ app.put('/updateTask', (request, response) => {
 
 app.delete('/deleteTask', (request, response) => {
 	console.log("Deleting Task");
-	var taskID = request.body.taskList;
+	var taskID = request.body.id;
 	console.log(taskID);
 
 	pool.connect((error, client, done) => {
