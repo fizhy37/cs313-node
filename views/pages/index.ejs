@@ -64,7 +64,10 @@
     }
 
     function createTask() {
-      $.post('/createTask',
+      if ($('#taskName').val() == '') {
+        alert("Enter a task");
+      } else {
+        $.post('/createTask',
         {
           'task': $('input[name=task]').val(),
           //'taskList': $('input[name=taskList]:checked').val()
@@ -81,6 +84,7 @@
             $('#taskName').val("");
           }
         });
+      }
     }
 
     function setDone(checkbox, id) {
@@ -166,8 +170,14 @@
 
   <div class="container">
     <h1>To Do List</h1>
+    <form action"createTask()">
       <input id="taskName" type="text" name="task">
-    <button onclick="createTask()">Create Task</button>
+      <button onclick="createTask()">Create Task</button>
+      <br/><br/>
+      <label for="order">Order By</label><br/>
+      <input type="radio" name="order" value="ASC" checked>Newest First<br/>
+      <input type="radio" name="order" value="DESC" onchange="initializeApp()">Oldest First
+    </form>
     <!--
     <button onclick="initializeApp()">Get To Do List</button>
     <button onclick="updateTask()">Update Task</button>
