@@ -2,6 +2,7 @@
 <html>
 <head>
   <% include ../partials/header.ejs %>
+  
   <!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>-->
 </head>
 
@@ -16,7 +17,7 @@
             console.log(status);
           } else {
             // var result = data.result;
-            //console.log("todo list data came back");
+            // console.log("todo list data came back");
             var result = data.result;
             //update DOM.
 
@@ -39,16 +40,21 @@
               //console.log(input_id);
               //$('#list').append('<input class="' +is_done+ '" type="radio" name="taskList" value="' +result[i].id+ '">' +result[i].task+ '</input><br/>');
               $('#list').append('<div class="' +is_done+ '">' +
-                                '<input type="checkbox" onchange="setDone(this, ' +taskID+ ');" ' +checkIt+ '>' +
-                                '<input type="text" id="' +input_id+ '" class="' +is_done+ '" value="' +taskName+ '" ' +
+                                '<label class="custom-control custom-checkbox my-label">' +
+                                '<input type="checkbox" class="custom-control-input" onchange="setDone(this, ' +taskID+ ');" ' +checkIt+ '>' +
+                                '<span class="custom-control-indicator"></span>' +
+                                '</label>' +
+                                '<input type="text" id="' +input_id+ '" class="' +is_done+ '" value="' +taskName+ '"' +
                                   'onchange="updateTask(' +taskID+ ', \'#' +input_id+ '\')">' +
                                 //'<button onclick="setDone(' +taskID+ ')">Done</button>' +
-                                '<button onclick="deleteTask(' +taskID+ ')">Delete</button>');
+                                '<button type="button" class="close" onclick="deleteTask(' +taskID+ ')" aria-label="Close"><span aria-hidden="true">&times;</span></button>' +
+                                '</div>');
               //console.log(result[i].id);
               //console.log(result[i].task);
               $('#forNotDone').attr('class', is_done);
               //console.log(is_done);
             })
+            $('#list').append('<div><input type="text" id="taskName" class="custom-control-input" onchange="createTask()"></label></div>');
           }
         });
     }
@@ -168,6 +174,10 @@
     }
   </script>
 
+<script src="https://code.jquery.com/jquery-3.2.1.min.js" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" crossorigin="anonymous"></script>
+
   <div class="container">
     <h1>To Do List</h1>
     <form action"createTask()">
@@ -184,9 +194,12 @@
     <button onclick="deleteTask()">Delete Task</button>
     -->
 
+    
+
     <hr>
 
     <div id="list"></div>
  </div>
+ 
 </body>
 </html>

@@ -44,13 +44,16 @@ app.get('/', function(request, response) {
 
 app.get('/todoList', function(request, response) {
   console.log('todoList');
+  
+  var order = request.query.order;
   var filter_done = 'SELECT * FROM item WHERE is_done = false ORDER BY id ASC;';
+  
 
 	pool.connect((error, client, done) => {
 		if (error) {
 			throw error;
 		}
-		client.query("SELECT * FROM item ORDER BY is_done ASC, id ASC;", function callback(err, res) {
+		client.query("SELECT * FROM item ORDER BY is_done ASC, id DESC;", function callback(err, res) {
 			done();
 			if (err) {
 				console.log(err.stack);

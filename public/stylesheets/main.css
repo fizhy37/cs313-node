@@ -27,11 +27,12 @@
 
 .not_done {
   background-color: red;
+  color: white;
   border: none;
   margin: 10px; }
 
   .not_done:focus {
-    background-color: white; }
+    background-color: #994444; }
 
 .is_done {
   color: white;
@@ -42,3 +43,8 @@
 
   .is_done:focus {
     background-color: #449944; }
+
+.my-label {
+  margin-top: 0rem;
+  margin-left: 1rem;
+}
