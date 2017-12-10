@@ -28,7 +28,9 @@
 .not_done {
   background-color: red;
   color: white;
+  outline: none;
   border: none;
+  width: 50%;
   margin: 10px; }
 
   .not_done:focus {
@@ -39,12 +41,24 @@
   background-color: green;
   outline: none;
   border:none;
+  width: 50%;
   margin: 10px; }
 
   .is_done:focus {
     background-color: #449944; }
 
+.task_input {
+  text-align: center;
+  margin: auto;
+  width: 50%;
+}
+
 .my-label {
   margin-top: 0rem;
   margin-left: 1rem;
+}
+
+.x-button {
+  margin-right: 15px;
+  margin-top: 5px;
 }

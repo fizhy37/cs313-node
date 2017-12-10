@@ -35,7 +35,8 @@
               var taskName = result[i].task;
 
               var input_id = result[i].id + result[i].task;
-              var input_id = input_id.replace(/(?!\w|\s)./g, '');
+              var reg = new RegExp("[ ]+","g");
+              input_id = input_id.replace(reg,"");
 
               //console.log(input_id);
               //$('#list').append('<input class="' +is_done+ '" type="radio" name="taskList" value="' +result[i].id+ '">' +result[i].task+ '</input><br/>');
@@ -44,17 +45,18 @@
                                 '<input type="checkbox" class="custom-control-input" onchange="setDone(this, ' +taskID+ ');" ' +checkIt+ '>' +
                                 '<span class="custom-control-indicator"></span>' +
                                 '</label>' +
-                                '<input type="text" id="' +input_id+ '" class="' +is_done+ '" value="' +taskName+ '"' +
+                                '<input type="text" id="' +input_id+ '" class="' +is_done+ ' task_input" value="' +taskName+ '"' +
                                   'onchange="updateTask(' +taskID+ ', \'#' +input_id+ '\')">' +
                                 //'<button onclick="setDone(' +taskID+ ')">Done</button>' +
-                                '<button type="button" class="close" onclick="deleteTask(' +taskID+ ')" aria-label="Close"><span aria-hidden="true">&times;</span></button>' +
+                                '<button type="button" class="close x-button" onclick="deleteTask(' +taskID+ ')" aria-label="Close"><span aria-hidden="true">&times;</span></button>' +
                                 '</div>');
               //console.log(result[i].id);
               //console.log(result[i].task);
+                console.log(input_id);
               $('#forNotDone').attr('class', is_done);
               //console.log(is_done);
             })
-            $('#list').append('<div><input type="text" id="taskName" class="custom-control-input" onchange="createTask()"></label></div>');
+            // $('#list').append('<div><input type="text" id="taskName" class="custom-control-input" onchange="createTask()"></label></div>');
           }
         });
     }
@@ -123,8 +125,8 @@
       var taskName = $(input_id).val();
 
       //console.log(data.taskList);
-      //console.log(taskName);
-      //console.log(id);
+      console.log(taskName);
+      console.log(id);
 
       $.ajax({
         url: '/updateTask',
@@ -193,8 +195,6 @@
     <button onclick="updateTask()">Update Task</button>
     <button onclick="deleteTask()">Delete Task</button>
     -->
-
-    
 
     <hr>
 
