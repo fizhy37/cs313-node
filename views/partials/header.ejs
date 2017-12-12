@@ -2,5 +2,178 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
-
 <link rel="stylesheet" type="text/css" href="/stylesheets/main.css" />
+
+<script>
+
+// retrieves the todo list from the database
+// called every time something changes on the page
+function initializeApp() {
+    // ajax call to the database
+    $.get('/todoList',
+    {
+        'task': $('input[name=task]').val(),
+        'hide_done': $('#hide_done').is(':checked'),
+        'order': $('input[name=order]:checked').val()
+    },
+    function callback(data, status) {
+        // log errors if request unsuccessful 
+        if (status != 'success') {
+        console.log(status);
+        } else {
+        // store results in a variable
+        var result = data.result;
+
+        // reset list to empty, then add updated list to the page
+        $('#list').html("");
+        $.each(result, function(i, item) {
+            // default value for task is not completed
+            var checkIt = 'unchecked';
+            var is_done = 'alert alert-danger';
+
+            // change if task is complete
+            if (result[i].is_done) {
+                is_done = 'alert alert-success';
+                checkIt = 'checked';
+            }
+
+            // store task ID and Task Name
+            var taskID = result[i].id;
+            var taskName = result[i].task;
+
+            // take out spaces from task name and combine it with the id number for unique html id
+            var input_id = result[i].id + result[i].task;
+            var reg = new RegExp("[ ]+","g");
+            input_id = input_id.replace(reg,"");
+
+            console.log(input_id);
+
+            // create html display for current task from database
+            $('#list').append(
+                '<div class="' +is_done+ ' col-lg-6 alert alert-success">' +
+                '<div class="input-group">' +
+                '<span class="input-group-addon my-label">' +
+                '<input type="checkbox" class="bigger" aria-label="Checkbox for following text input"' + 
+                'onchange="setDone(this, ' +taskID+ ');" ' +checkIt+ '></span>' +
+                '<input type="text" id="' +input_id+ '" class="' +is_done+ ' task_input form-control"' + 
+                'aria-label="Text input with checkbox" value="' +taskName+ '"' +
+                'onchange="updateTask(' +taskID+ ', \'#' +input_id+ '\')">' +
+                '<button type="button" class="close x-button" onclick="deleteTask(' +taskID+ ')"' + 
+                'aria-label="Close"><span aria-hidden="true" class="x-button">&times;</span></button>' +
+                '</div></div>');          
+            });
+        }
+    });
+}
+
+// to be implemented with login page
+function handleLogin() {
+    var username = $("#username").val();
+    var password = $("#password").val();
+    
+    var params = {
+        username: username,
+        password: password
+    };
+}
+
+// called when new task input field is changed
+function createTask() {
+    // make sure task name is not empty
+    if ($('#taskName').val() == '') {
+        alert("Enter a task");
+    } else {
+        // not empty so send data
+        $.post('/createTask',
+        {
+            'task': $('input[name=task]').val(),
+        },
+        function callback(data, status) {
+            // log errors if request unsuccessful 
+            if (status != 'success') {
+                console.log(status);
+            } else {
+                // update todo list and empty task input 
+                initializeApp();
+                $('#taskName').val("");
+            }
+        });
+    }
+}
+
+function setDone(checkbox, id) {
+    // check if checkbox is checked
+    var is_done = false;
+    if (checkbox.checked == true) {
+        is_done = true;
+    }
+
+    // send the data through PUT method
+    $.ajax({
+    url: '/setDone',
+    type: 'PUT',
+    data: {
+        'id': id,
+        'is_done': is_done
+    },
+    json: true,
+    success: function callback(data, status) {
+        // log errors if request unsuccessful otherwise update todo list
+        if (status != 'success') {
+            console.log(status);
+        } else {
+            initializeApp();
+        }
+    }});
+}
+
+// called when task name changes
+function updateTask(id, input_id) {
+    // store checked value and task name
+    var taskList = $('input[name=taskList]:checked').val();
+    var taskName = $(input_id).val();
+
+    // console.log(taskName);
+    // console.log(id);
+
+    // send the data through the PUT method
+    $.ajax({
+    url: '/updateTask',
+    type: 'PUT',
+    data: {
+        'taskName': taskName,
+        'id': id
+    },
+    json: true,
+    success: function callback(data, status) {
+        // log errors if request unsuccessful otherwise update todo list
+        if (status != 'success') {
+            console.log(status);
+        } else {
+            initializeApp();
+            $('#taskName').val("");
+        }
+    }});
+}
+
+// called when X is pushed on a task
+function deleteTask(id) {
+    // send the data through DELETE method
+    $.ajax({
+    url: '/deleteTask',
+    type: 'DELETE',
+    data: {
+        'id': id,
+    },
+    json: true,
+    success: function callback(data, status) {
+        // log errors if request unsuccessful otherwise update todo list
+        if (status != 'success') {
+            console.log(status);
+        } else {
+            initializeApp();
+        }
+    }});
+}
+
+</script>

@@ -12,22 +12,22 @@ const pool = new Pool({
 });
 
 pool.connect((error, client, done) => {
-		if (error) {
-			throw error;
+	if (error) {
+		throw error;
+	}
+	client.query("SELECT 1 from information_schema.tables WHERE table_name = 'item';", function callback(err, res) { 
+		if (res.rowCount == 0) {
+			client.query("CREATE TABLE IF NOT EXISTS item (id SERIAL, task VARCHAR(255), is_done BOOLEAN);", function callback(err, res) {
+				client.query("INSERT INTO item (id, task, is_done) VALUES (DEFAULT, 'homework', false);", function callback(err, res) {
+					done();
+					console.log("Table initialized");
+				});
+			})
+		} else {
+			console.log("Table Exists");
 		}
-		client.query("SELECT 1 from information_schema.tables WHERE table_name = 'item';", function callback(err, res) { 
-			if (res.rowCount == 0) {
-				client.query("CREATE TABLE IF NOT EXISTS item (id SERIAL, task VARCHAR(255), is_done BOOLEAN);", function callback(err, res) {
-					client.query("INSERT INTO item (id, task, is_done) VALUES (DEFAULT, 'homework', false);", function callback(err, res) {
-						done();
-						console.log("Table initialized");
-					});
-				})
-			} else {
-				console.log("Table Exists");
-			}
-		});
 	});
+});
 
 
 app.use(bodyParser.json());
