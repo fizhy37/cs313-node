@@ -48,17 +48,28 @@
     background-color: #449944; }
 
 .task_input {
-  text-align: center;
+  border:none;
+  font-size: 1.2em;
   margin: auto;
-  width: 50%;
+  margin-left:0px;
+  margin-right:15px;
+  width: 75%;
 }
 
 .my-label {
-  margin-top: 0rem;
-  margin-left: 1rem;
+  margin:auto;
+  margin-left:15px;
+  margin-right:15px;
+  padding: 10px;
+  display: inline-grid;
 }
 
 .x-button {
   margin-right: 15px;
-  margin-top: 5px;
+  margin: auto;
+}
+
+.bigger {
+  width: 30px;
+  height: 30px;
 }

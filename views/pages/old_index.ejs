@@ -22,22 +22,12 @@
             //update DOM.
 
             $('#list').html("");
-
-            // $('#list').append('<div class="col-lg-6 alert alert-success">' +
-            //                   '<div class="input-group">' +
-            //                   '<span class="input-group-addon my-label">' +
-            //                   '<input type="checkbox" class="bigger" aria-label="Checkbox for following text input">' +
-            //                   '</span>' +
-            //                   '<input type="text" id="taskName" class="form-control task_input my-label" aria-label="Text input with checkbox" placeholder="New Task"' +
-            //                     'onchange="createTask()">' +
-            //                   '</div></div>');
-
             $.each(result, function(i, item) {
               var checkIt = 'unchecked';
-              var is_done = 'alert alert-danger';
+              var is_done = 'not_done';
 
               if (result[i].is_done) {
-                is_done = 'alert alert-success';
+                is_done = 'is_done';
                 checkIt = 'checked';
               }
 
@@ -50,15 +40,16 @@
 
               //console.log(input_id);
               //$('#list').append('<input class="' +is_done+ '" type="radio" name="taskList" value="' +result[i].id+ '">' +result[i].task+ '</input><br/>');
-              $('#list').append('<div class="' +is_done+ ' col-lg-6 alert alert-success">' +
-                                '<div class="input-group">' +
-                                '<span class="input-group-addon my-label">' +
-                                '<input type="checkbox" class="bigger" aria-label="Checkbox for following text input" onchange="setDone(this, ' +taskID+ ');" ' +checkIt+ '>' +
-                                '</span>' +
-                                '<input type="text" id="' +input_id+ '" class="' +is_done+ ' task_input form-control" aria-label="Text input with checkbox" value="' +taskName+ '"' +
+              $('#list').append('<div class="' +is_done+ '">' +
+                                '<label class="custom-control custom-checkbox my-label">' +
+                                '<input type="checkbox" class="custom-control-input" onchange="setDone(this, ' +taskID+ ');" ' +checkIt+ '>' +
+                                '<span class="custom-control-indicator"></span>' +
+                                '</label>' +
+                                '<input type="text" id="' +input_id+ '" class="' +is_done+ ' task_input" value="' +taskName+ '"' +
                                   'onchange="updateTask(' +taskID+ ', \'#' +input_id+ '\')">' +
-                                '<button type="button" class="close x-button" onclick="deleteTask(' +taskID+ ')" aria-label="Close"><span aria-hidden="true" class="x-button">&times;</span></button>' +
-                                '</div></div>');
+                                //'<button onclick="setDone(' +taskID+ ')">Done</button>' +
+                                '<button type="button" class="close x-button" onclick="deleteTask(' +taskID+ ')" aria-label="Close"><span aria-hidden="true">&times;</span></button>' +
+                                '</div>');
               //console.log(result[i].id);
               //console.log(result[i].task);
                 console.log(input_id);
@@ -130,7 +121,7 @@
     }
 
     function updateTask(id, input_id) {
-      var taskList = $('input[name=taskList]:checked').val();
+      //var taskList = $('input[name=taskList]:checked').val();
       var taskName = $(input_id).val();
 
       //console.log(data.taskList);
@@ -192,8 +183,8 @@
   <div class="container">
     <h1>To Do List</h1>
     <form action"createTask()">
-      <!--<input id="taskName" type="text" name="task">
-      <button onclick="createTask()">Create Task</button>-->
+      <input id="taskName" type="text" name="task">
+      <button onclick="createTask()">Create Task</button>
       <br/><br/>
       <label for="order">Order By</label><br/>
       <input type="radio" name="order" value="ASC" checked>Newest First<br/>
@@ -205,16 +196,7 @@
     <button onclick="deleteTask()">Delete Task</button>
     -->
 
-    <br>
-
     <hr>
-
-    <div class="col-lg-6 alert alert-success">
-        <div class="input-group">
-
-            <input type="text" id="taskName" name="task" class="form-control task_input my-label" aria-label="Text input with checkbox" onchange="createTask()">
-        </div>
-    </div>
 
     <div id="list"></div>
  </div>
