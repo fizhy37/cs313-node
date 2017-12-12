@@ -52,7 +52,7 @@ app.get('/todoList', function(request, response) {
   if (request.query.hide_done == 'true') {
   	filter_done = 'SELECT * FROM item WHERE is_done = false ORDER BY id ' +order+ ';';
   } else {
-  	filter_done = 'SELECT * FROM item ORDER BY is_done ASC, id ' +order+ ';';
+  	filter_done = 'SELECT * FROM item ORDER BY id ' +order+ ';';
   }
 
 	pool.connect((error, client, done) => {

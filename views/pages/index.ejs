@@ -9,12 +9,6 @@
 <body onload="initializeApp()">
   <script> 
     function initializeApp() {
-      var check_done = $('input[id=hide_done]:checked');
-      var hide_done = false;
-
-      if ($('#hide_done').is(':checked')) {
-        hide_done = true;
-      }
       console.log(hide_done);
       $.get('/todoList',
         {
@@ -194,12 +188,11 @@
     <h1>To Do List</h1>
     <form action"createTask()">
       <br/>
-          <label for="order">Order By</label><br/>
-          <input type="radio" name="order" value="DESC" onchange="initializeApp()" checked> Newest First<br/>
-          <input type="radio" name="order" value="ASC" onchange="initializeApp()"> Oldest First<br><br>
-          <input type="checkbox" name="hide_done" id="hide_done" onchange="initializeApp()"> Hide Completed Tasks
+      <label for="order">Order By</label><br/>
+      <input type="radio" name="order" value="DESC" onchange="initializeApp()" checked> Newest First<br/>
+      <input type="radio" name="order" value="ASC" onchange="initializeApp()"> Oldest First<br><br>
+      <input type="checkbox" name="hide_done" id="hide_done" onchange="initializeApp()" checked> Hide Completed Tasks
     </form>
-    <br>
     <hr>
     <div class="col-lg-6 alert alert-info">
         <div class="input-group">
