@@ -46,14 +46,20 @@ app.get('/todoList', function(request, response) {
   console.log('todoList');
   
   var order = request.query.order;
-  var filter_done = 'SELECT * FROM item WHERE is_done = false ORDER BY id ASC;';
-  
+  // var filter_order = 'SELECT * FROM item ORDER BY is_done ASC, id ' +order+ ';';
+  var filter_done = "";
+
+  if (request.query.hide_done == 'true') {
+  	filter_done = 'SELECT * FROM item WHERE is_done = false ORDER BY id ' +order+ ';';
+  } else {
+  	filter_done = 'SELECT * FROM item ORDER BY is_done ASC, id ' +order+ ';';
+  }
 
 	pool.connect((error, client, done) => {
 		if (error) {
 			throw error;
 		}
-		client.query("SELECT * FROM item ORDER BY is_done ASC, id DESC;", function callback(err, res) {
+		client.query(filter_done, function callback(err, res) {
 			done();
 			if (err) {
 				console.log(err.stack);

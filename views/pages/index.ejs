@@ -7,10 +7,21 @@
 </head>
 
 <body onload="initializeApp()">
-  <!--<% include ../partials/nav.ejs %>-->
   <script> 
     function initializeApp() {
+      var check_done = $('input[id=hide_done]:checked');
+      var hide_done = false;
+
+      if ($('#hide_done').is(':checked')) {
+        hide_done = true;
+      }
+      console.log(hide_done);
       $.get('/todoList',
+        {
+          'task': $('input[name=task]').val(),
+          'hide_done': $('#hide_done').is(':checked'),
+          'order': $('input[name=order]:checked').val()
+        },
         function callback(data, status) {
           //when the thing comes back, update the DOM. 
           if (status != 'success') {
@@ -22,15 +33,6 @@
             //update DOM.
 
             $('#list').html("");
-
-            // $('#list').append('<div class="col-lg-6 alert alert-success">' +
-            //                   '<div class="input-group">' +
-            //                   '<span class="input-group-addon my-label">' +
-            //                   '<input type="checkbox" class="bigger" aria-label="Checkbox for following text input">' +
-            //                   '</span>' +
-            //                   '<input type="text" id="taskName" class="form-control task_input my-label" aria-label="Text input with checkbox" placeholder="New Task"' +
-            //                     'onchange="createTask()">' +
-            //                   '</div></div>');
 
             $.each(result, function(i, item) {
               var checkIt = 'unchecked';
@@ -64,8 +66,7 @@
                 console.log(input_id);
               $('#forNotDone').attr('class', is_done);
               //console.log(is_done);
-            })
-            // $('#list').append('<div><input type="text" id="taskName" class="custom-control-input" onchange="createTask()"></label></div>');
+            });
           }
         });
     }
@@ -192,30 +193,19 @@
   <div class="container">
     <h1>To Do List</h1>
     <form action"createTask()">
-      <!--<input id="taskName" type="text" name="task">
-      <button onclick="createTask()">Create Task</button>-->
-      <br/><br/>
-      <label for="order">Order By</label><br/>
-      <input type="radio" name="order" value="ASC" checked>Newest First<br/>
-      <input type="radio" name="order" value="DESC" onchange="initializeApp()">Oldest First
+      <br/>
+          <label for="order">Order By</label><br/>
+          <input type="radio" name="order" value="DESC" onchange="initializeApp()" checked> Newest First<br/>
+          <input type="radio" name="order" value="ASC" onchange="initializeApp()"> Oldest First<br><br>
+          <input type="checkbox" name="hide_done" id="hide_done" onchange="initializeApp()"> Hide Completed Tasks
     </form>
-    <!--
-    <button onclick="initializeApp()">Get To Do List</button>
-    <button onclick="updateTask()">Update Task</button>
-    <button onclick="deleteTask()">Delete Task</button>
-    -->
-
     <br>
-
     <hr>
-
-    <div class="col-lg-6 alert alert-success">
+    <div class="col-lg-6 alert alert-info">
         <div class="input-group">
-
-            <input type="text" id="taskName" name="task" class="form-control task_input my-label" aria-label="Text input with checkbox" onchange="createTask()">
+            <input type="text" id="taskName" name="task" class="form-control my-label" aria-label="Text input with checkbox" placeholder="New Task" onchange="createTask()">
         </div>
     </div>
-
     <div id="list"></div>
  </div>
  
